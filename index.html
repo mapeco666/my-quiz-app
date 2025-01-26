@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>トイレ用: 自動で表紙→問題→回答ループ</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="cover-mode">
+  <div class="content-center">
+
+    <!-- ◆ 表紙用コンテナ (何も表示しない) -->
+    <div id="cover-container" class="main-container" style="display: block;">
+      <!-- 表示したくないので、テキストなし -->
+    </div>
+
+    <!-- ◆ 問題用コンテナ -->
+    <div id="question-container" class="main-container" style="display: none;">
+      <p id="question">問題がここに表示されます</p>
+      <p id="supplement" class="small-text">補足がここに表示されます</p>
+    </div>
+
+    <!-- ◆ 回答用コンテナ -->
+    <div id="answer-container" class="main-container" style="display: none;">
+      <p id="answer">答えがここに表示されます</p>
+      <p id="explanation" class="small-text">解説がここに表示されます</p>
+    </div>
+
+  </div><!-- /content-center -->
+
+  <script>
+    let questions = [];
+    let currentTimeout = null;
+
+    // ===============================
+    // 1. ページ読み込みでCSV取得
+    // ===============================
+    window.onload = () => {
+      loadCSV();
+    };
+
+    function loadCSV() {
+      fetch('questions.csv')
+        .then(response => response.text())
+        .then(data => {
+          const lines = data.split('\n').filter(line => line.trim() !== '');
+          // 1行目はヘッダー行
+          questions = lines.slice(1).map(line => {
+            const [question, answer, supplement, explanation] = line.split(',');
+            return { question, answer, supplement, explanation };
+          });
+          // CSVロード完了後、フロー開始
+          startFlow();
+        })
+        .catch(err => console.error('Error loading CSV:', err));
+    }
+
+    // ===============================
+    // 2. フロー開始 (表紙5秒→問題回答ループ)
+    // ===============================
+    function startFlow() {
+      showCover(); // 表紙(空表示)5秒
+      currentTimeout = setTimeout(() => {
+        loopQuestionAnswer(); // 5秒後に問題回答ループ開始
+      }, 5000);
+    }
+
+    // ===============================
+    // 3. 表紙を表示 (音を鳴らす)
+    // ===============================
+    function showCover() {
+      clearTimeout(currentTimeout);
+
+      // 表紙を表示, 他を隠す
+      document.getElementById('cover-container').style.display = 'block';
+      document.getElementById('question-container').style.display = 'none';
+      document.getElementById('answer-container').style.display = 'none';
+
+      // 背景をcover-mode
+      document.body.classList.add('cover-mode');
+      document.body.classList.remove('question-mode', 'answer-mode');
+
+      // ★表紙音 (cover-sound.mp3) 自動再生
+      const coverAudio = new Audio('cover-sound.mp3');
+      coverAudio.play().catch(err => {
+        console.log("Autoplay blocked or error:", err);
+      });
+    }
+
+    // ===============================
+    // 4. 問題→回答を15秒ごとに繰り返す
+    // ===============================
+    function loopQuestionAnswer() {
+      showQuestion();
+      currentTimeout = setTimeout(() => {
+        showAnswer();
+        currentTimeout = setTimeout(() => {
+          loopQuestionAnswer();
+        }, 15000);
+      }, 15000);
+    }
+
+    // ===============================
+    // 5. 問題表示 (15秒)
+    // ===============================
+    function showQuestion() {
+      clearTimeout(currentTimeout);
+
+      // ランダムに1問
+      const randomIndex = Math.floor(Math.random() * questions.length);
+      const picked = questions[randomIndex];
+
+      document.getElementById('question').innerHTML = picked.question;
+      document.getElementById('supplement').innerHTML = picked.supplement;
+      document.getElementById('answer').innerHTML = picked.answer;
+      document.getElementById('explanation').innerHTML = picked.explanation;
+
+      document.getElementById('cover-container').style.display = 'none';
+      document.getElementById('question-container').style.display = 'block';
+      document.getElementById('answer-container').style.display = 'none';
+
+      // 背景をquestion-mode
+      document.body.classList.add('question-mode');
+      document.body.classList.remove('cover-mode', 'answer-mode');
+
+      // ★問題表示の音 (question-sound.mp3)
+      const questionAudio = new Audio('question-sound.mp3');
+      questionAudio.play().catch(err => {
+        console.log("Autoplay blocked or error:", err);
+      });
+    }
+
+    // ===============================
+    // 6. 回答表示 (15秒)
+    // ===============================
+    function showAnswer() {
+      clearTimeout(currentTimeout);
+
+      document.getElementById('question-container').style.display = 'none';
+      document.getElementById('answer-container').style.display = 'block';
+
+      // 背景をanswer-mode
+      document.body.classList.add('answer-mode');
+      document.body.classList.remove('question-mode', 'cover-mode');
+
+      // ★回答表示の音 (answer-sound.mp3)
+      const answerAudio = new Audio('answer-sound.mp3');
+      answerAudio.play().catch(err => {
+        console.log("Autoplay blocked or error:", err);
+      });
+    }
+  </script>
+</body>
+</html>
