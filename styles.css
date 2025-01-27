@@ -1,67 +1,42 @@
-/* ========== 1) 全体のリセット & html, bodyを100%に ========== */
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* 全体の文字サイズの基準を設定 */
+html {
+  font-size: 16px; /* 基本のフォントサイズ */
 }
 
-/* ========== 2) bodyの基本設定 ========== */
-body {
-  font-family: "Noto Sans JP", sans-serif;
+@media (max-width: 1024px) { /* タブレット用 */
+  html {
+    font-size: 14px; /* 基本フォントサイズを少し小さく */
+  }
 }
 
-/* ========== 3) コンテンツを中央寄せするラッパ ========== */
-.content-center {
-  display: flex;
-  flex-direction: column;  
-  justify-content: center;  /* 縦方向中央 */
-  align-items: center;      /* 横方向中央 */
-  height: 100%;            /* bodyが100%の高さなので、ここも100% */
+@media (max-width: 768px) { /* スマホ用 */
+  html {
+    font-size: 12px; /* スマホでさらに小さく */
+  }
 }
 
-/* ========== 4) 背景画像切り替え ========== */
-.cover-mode {
-  background: url('cover-bg.jpg') center center / cover no-repeat fixed;
-}
-.question-mode {
-  background: url('question-bg.jpg') center center / cover no-repeat fixed;
-}
-.answer-mode {
-  background: url('answer-bg.jpg') center center / cover no-repeat fixed;
-}
-
-/* ========== 5) メインコンテナの枠設定 ========== */
-.main-container {
-  width: 90%;             /* 幅を9割に拡張 */
-  max-width: 800px;       /* 画面が広い時でも最大800pxで調整 */
-  margin: 40px;           /* 外側の余白を少し広めに */
-  padding: 30px;          /* 内側の余白も増やす */
-  background-color: transparent; /* 塗りをなくす */
-  border: none;           /* 線を非表示 */
-  box-shadow: none;       /* 影も消す */
-}
-
-/* ========== 6) 文字の大きさやスタイル ========== */
-/* 問題＆答え → 大きめ */
+/* 問題＆答えの文字サイズ */
 #question,
 #answer {
-  font-size: 100px;
+  font-size: 2.5rem; /* ルートフォントサイズ基準で大きく */
   font-weight: bold;
-  margin-bottom: 10px;
   text-align: center;
+  margin-bottom: 10px;
   animation: fade-in 1s ease; /* フェードインエフェクト */
 }
 
-
-
-/* 補足＆解説 → 小さめ & イタリック */
+/* 補足＆解説の文字サイズ */
 .small-text {
-  font-size: 40px;
+  font-size: 1.5rem; /* ルートフォントサイズ基準で調整 */
   color: #555;
   font-style: italic;
-  animation: fade-in 1s ease; /* フェードインエフェクト */
+  animation: fade-in 1s ease;
+}
+
+/* ボタンの文字サイズ */
+#start-button {
+  font-size: 2rem; /* ボタン文字サイズを大きめに */
+  padding: 1rem 2rem; /* ボタンの余白も調整 */
 }
 
 /* フェードインエフェクト */
@@ -72,41 +47,4 @@ body {
   to {
     opacity: 1;
   }
-}
-
-/* ========== ふりがな（<rt>）のスタイル ========== */
-rt {
-  font-size: 0.3em; /* メイン文字の半分のサイズ */
-  font-weight: normal; /* 通常の太さ */
-  color: #666; /* 落ち着いた色 */
-  font-style: normal; /* イタリックではない */
-}
-
-/* ========== 7) スタートボタンのスタイル ========== */
-#start-button {
-  position: fixed;
-  bottom: 150px; /* 右下からさらに中央寄りに調整 */
-  right: 200px; /* 右下からさらに中央寄りに調整 */
-  font-size: 80px; /* ボタン文字サイズをさらに大きく */
-  font-weight: bold; /* 太字 */
-  color: white; /* 文字色 */
-  background-color: #e63946; /* 赤い背景 */
-  border: none; /* ボーダーなし */
-  border-radius: 15px; /* ボタンの角をさらに丸く */
-  padding: 30px 60px; /* ボタン内の余白をさらに大きく */
-  cursor: pointer; /* マウスポインタを指アイコンに */
-  box-shadow: 0px 8px #b02030; /* ボタン下の影を強調 */
-  transition: all 0.2s ease; /* スムーズなアニメーション */
-}
-
-/* ボタンを押したときのエフェクト */
-#start-button:active {
-  transform: translateY(5px); /* ボタンを押したように見せる */
-  box-shadow: 0px 4px #b02030; /* 影を縮小して凹んだ演出 */
-}
-
-/* クリックエフェクト用のクラス */
-#start-button.clicked {
-  transform: scale(0.95); /* 少し小さくする */
-  box-shadow: 0px 4px #b02030; /* クリック時の影を強調 */
 }
