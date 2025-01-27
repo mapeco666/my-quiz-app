@@ -22,7 +22,6 @@ body {
 }
 
 /* ========== 4) 背景画像切り替え ========== */
-
 .cover-mode {
   background: url('cover-bg.jpg') center center / cover no-repeat fixed;
 }
@@ -42,28 +41,72 @@ body {
   background-color: transparent; /* 塗りをなくす */
   border: none;           /* 線を非表示 */
   box-shadow: none;       /* 影も消す */
-  /* border-radius: 8px;  角を丸めたいなら残す */
 }
 
 /* ========== 6) 文字の大きさやスタイル ========== */
 /* 問題＆答え → 大きめ */
 #question,
 #answer {
-  font-size: 110px;
+  font-size: 100px;
   font-weight: bold;
   margin-bottom: 10px;
-  text-align: center; 
+  text-align: center;
+  animation: fade-in 1s ease; /* フェードインエフェクト */
 }
+
+
 
 /* 補足＆解説 → 小さめ & イタリック */
 .small-text {
-  font-size: 45px;
+  font-size: 40px;
   color: #555;
   font-style: italic;
+  animation: fade-in 1s ease; /* フェードインエフェクト */
 }
 
+/* フェードインエフェクト */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ========== ふりがな（<rt>）のスタイル ========== */
 rt {
-  font-size: 0.25em;
-  font-weight: normal;
-  color: #444;
+  font-size: 0.3em; /* メイン文字の半分のサイズ */
+  font-weight: normal; /* 通常の太さ */
+  color: #666; /* 落ち着いた色 */
+  font-style: normal; /* イタリックではない */
+}
+
+/* ========== 7) スタートボタンのスタイル ========== */
+#start-button {
+  position: fixed;
+  bottom: 150px; /* 右下からさらに中央寄りに調整 */
+  right: 200px; /* 右下からさらに中央寄りに調整 */
+  font-size: 80px; /* ボタン文字サイズをさらに大きく */
+  font-weight: bold; /* 太字 */
+  color: white; /* 文字色 */
+  background-color: #e63946; /* 赤い背景 */
+  border: none; /* ボーダーなし */
+  border-radius: 15px; /* ボタンの角をさらに丸く */
+  padding: 30px 60px; /* ボタン内の余白をさらに大きく */
+  cursor: pointer; /* マウスポインタを指アイコンに */
+  box-shadow: 0px 8px #b02030; /* ボタン下の影を強調 */
+  transition: all 0.2s ease; /* スムーズなアニメーション */
+}
+
+/* ボタンを押したときのエフェクト */
+#start-button:active {
+  transform: translateY(5px); /* ボタンを押したように見せる */
+  box-shadow: 0px 4px #b02030; /* 影を縮小して凹んだ演出 */
+}
+
+/* クリックエフェクト用のクラス */
+#start-button.clicked {
+  transform: scale(0.95); /* 少し小さくする */
+  box-shadow: 0px 4px #b02030; /* クリック時の影を強調 */
 }
