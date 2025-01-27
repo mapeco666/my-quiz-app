@@ -2,7 +2,8 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>トイレ用: 表紙10秒表示→問題→回答ループ</title>
+  <title>スタートボタン付き: 表紙→問題→回答</title>
+  <!-- CSSファイルを読み込む -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="cover-mode">
@@ -10,19 +11,19 @@
 
     <!-- 表紙用コンテナ -->
     <div id="cover-container" class="main-container" style="display: block;">
-      <!-- 表紙は音だけで、テキストなし -->
+      <button id="start-button">スタート</button>
     </div>
 
     <!-- 問題用コンテナ -->
     <div id="question-container" class="main-container" style="display: none;">
-      <p id="question">問題がここに表示されます</p>
-      <p id="supplement" class="small-text">補足がここに表示されます</p>
+      <p id="question" class="fade-in">問題がここに表示されます</p>
+      <p id="supplement" class="small-text fade-in">補足がここに表示されます</p>
     </div>
 
     <!-- 回答用コンテナ -->
     <div id="answer-container" class="main-container" style="display: none;">
-      <p id="answer">答えがここに表示されます</p>
-      <p id="explanation" class="small-text">解説がここに表示されます</p>
+      <p id="answer" class="fade-in">答えがここに表示されます</p>
+      <p id="explanation" class="small-text fade-in">解説がここに表示されます</p>
     </div>
 
   </div><!-- /content-center -->
@@ -47,41 +48,48 @@
             const [question, answer, supplement, explanation] = line.split(',');
             return { question, answer, supplement, explanation };
           });
-          startFlow();
+          initStartButton();
         })
         .catch(err => console.error('Error loading CSV:', err));
     }
 
     // ===============================
-    // フロー開始（表紙10秒表示）
+    // スタートボタンの初期設定
     // ===============================
-    function startFlow() {
-      showCover();
+    function initStartButton() {
+      const startButton = document.getElementById('start-button');
+      startButton.onclick = () => {
+        // ボタンのクリックエフェクトを一時的に適用
+        startButton.classList.add('clicked');
+        setTimeout(() => {
+          startButton.classList.remove('clicked');
+        }, 200);
+
+        const coverAudio = new Audio('cover-sound.mp3');
+        coverAudio.play().then(() => {
+          console.log("表紙の音が再生されました！");
+          setTimeout(() => {
+            startFlow();
+          }, 3000); // ★3秒後に問題表示
+        }).catch(err => {
+          console.log("音声が再生されませんでした:", err);
+          startFlow(); // 音が鳴らなくても進行
+        });
+
+        // 問題が表示されるときにボタンを非表示にする
+        setTimeout(() => {
+          startButton.style.display = 'none';
+        }, 3000);
+      };
     }
 
-    function showCover() {
-      clearTimeout(currentTimeout);
-
-      // 表紙を表示、他を隠す
-      document.getElementById('cover-container').style.display = 'block';
-      document.getElementById('question-container').style.display = 'none';
-      document.getElementById('answer-container').style.display = 'none';
-
-      document.body.classList.add('cover-mode');
-      document.body.classList.remove('question-mode', 'answer-mode');
-
-      // ★1秒遅らせて音声再生
-      setTimeout(() => {
-        const coverAudio = new Audio('cover-sound.mp3');
-        coverAudio.play().catch(err => {
-          console.log("表紙の音が再生されませんでした:", err);
-        });
-      }, 1000);
-
-      // ★10秒後に問題回答ループを開始
-      currentTimeout = setTimeout(() => {
-        loopQuestionAnswer();
-      }, 10000);
+    // ===============================
+    // フロー開始
+    // ===============================
+    function startFlow() {
+      document.getElementById('cover-container').style.display = 'none'; // 表紙を非表示
+      document.getElementById('question-container').style.display = 'block'; // 問題を表示
+      loopQuestionAnswer();
     }
 
     // ===============================
@@ -93,8 +101,8 @@
         showAnswer();
         currentTimeout = setTimeout(() => {
           loopQuestionAnswer();
-        }, 15000);
-      }, 15000);
+        }, 8000);
+      }, 14000);
     }
 
     function showQuestion() {
@@ -108,7 +116,6 @@
       document.getElementById('answer').innerHTML = picked.answer;
       document.getElementById('explanation').innerHTML = picked.explanation;
 
-      document.getElementById('cover-container').style.display = 'none';
       document.getElementById('question-container').style.display = 'block';
       document.getElementById('answer-container').style.display = 'none';
 
