@@ -1,4 +1,4 @@
-/* ========== 1) 全体のリセット & html, bodyを100%に ========== */
+/* ========== 1) 全体のリセット ========== */
 html, body {
   width: 100%;
   height: 100%;
@@ -12,13 +12,13 @@ body {
   font-family: "Noto Sans JP", sans-serif;
 }
 
-/* ========== 3) コンテンツを中央寄せするラッパ ========== */
+/* ========== 3) 中央寄せ ========== */
 .content-center {
   display: flex;
-  flex-direction: column;  
-  justify-content: center;  /* 縦方向中央 */
-  align-items: center;      /* 横方向中央 */
-  height: 100%;            /* bodyが100%の高さなので、ここも100% */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 /* ========== 4) 背景画像切り替え ========== */
@@ -32,70 +32,47 @@ body {
   background: url('answer-bg.jpg') center center / cover no-repeat fixed;
 }
 
-/* ========== 5) メインコンテナの枠設定 ========== */
-.main-container {
-  width: 90%;             /* 幅を9割に拡張 */
-  max-width: 800px;       /* 画面が広い時でも最大800pxで調整 */
-  margin: 40px;           /* 外側の余白を少し広めに */
-  padding: 30px;          /* 内側の余白も増やす */
-  background-color: transparent; /* 塗りをなくす */
-  border: none;           /* 線を非表示 */
-  box-shadow: none;       /* 影も消す */
-}
-
-/* ========== 6) 文字の大きさやスタイル ========== */
-#question,
-#answer {
+/* ========== 5) 文字サイズ調整 ========== */
+#question, #answer {
   font-size: 100px;
   font-weight: bold;
-  margin-bottom: 10px;
   text-align: center;
-  animation: fade-in 1s ease; /* フェードインエフェクト */
+  animation: fade-in 1s ease;
 }
 
-/* 補足＆解説 → 小さめ & イタリック */
 .small-text {
   font-size: 40px;
   color: #555;
   font-style: italic;
-  animation: fade-in 1s ease; /* フェードインエフェクト */
+  animation: fade-in 1s ease;
 }
 
-/* フェードインエフェクト */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* ========== 6) ふりがな調整 ========== */
+rt {
+  font-size: 0.3em; /* 40%の大きさ */
+  font-weight: normal;
+  color: #666;
+  vertical-align: top;
 }
 
-/* ========== スタートボタンのスタイル ========== */
+/* ========== 7) スタートボタン ========== */
 #start-button {
   position: fixed;
-  bottom: 150px; /* 右下からさらに中央寄りに調整 */
-  right: 200px; /* 右下からさらに中央寄りに調整 */
-  font-size: 80px; /* ボタン文字サイズをさらに大きく */
-  font-weight: bold; /* 太字 */
-  color: white; /* 文字色 */
-  background-color: #e63946; /* 赤い背景 */
-  border: none; /* ボーダーなし */
-  border-radius: 15px; /* ボタンの角をさらに丸く */
-  padding: 30px 60px; /* ボタン内の余白をさらに大きく */
-  cursor: pointer; /* マウスポインタを指アイコンに */
-  box-shadow: 0px 8px #b02030; /* ボタン下の影を強調 */
-  transition: all 0.2s ease; /* スムーズなアニメーション */
+  bottom: 120px;
+  right: 150px;
+  font-size: 80px;
+  font-weight: bold;
+  color: white;
+  background-color: #e63946;
+  border: none;
+  border-radius: 15px;
+  padding: 30px 60px;
+  cursor: pointer;
+  box-shadow: 0px 8px #b02030;
+  transition: all 0.2s ease;
 }
 
-/* ボタンを押したときのエフェクト */
 #start-button:active {
-  transform: translateY(5px); /* ボタンを押したように見せる */
-  box-shadow: 0px 4px #b02030; /* 影を縮小して凹んだ演出 */
-}
-
-/* クリックエフェクト用のクラス */
-#start-button.clicked {
-  transform: scale(0.95); /* 少し小さくする */
-  box-shadow: 0px 4px #b02030; /* クリック時の影を強調 */
+  transform: translateY(5px);
+  box-shadow: 0px 4px #b02030;
 }
